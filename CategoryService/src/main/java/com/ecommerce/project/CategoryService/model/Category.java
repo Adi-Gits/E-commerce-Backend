@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @OneToMany(mappedBy = "category")
     private Long categoryId;
 
     @NotBlank(message = "Name cannot be blank")
