@@ -29,7 +29,7 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+//    @EqualsAndHashCode.Exclude
     private List<Product> products;
 
 //    public void setCategoryName(String categoryName) {

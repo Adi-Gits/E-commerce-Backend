@@ -187,7 +187,7 @@ public class ProductServiceImpl implements ProductService {
         productFromDB.setDiscount(product.getDiscount());
         productFromDB.setSpecialPrice(product.getPrice() - (product.getDiscount() * 0.01 * product.getPrice()));
 //        product.setCategory(updatedProduct.get);
-        return modelMapper.map(productRepository.save(product), ProductDTO.class);
+        return modelMapper.map(productRepository.save(productFromDB), ProductDTO.class);
     }
 
     @Override

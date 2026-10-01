@@ -13,10 +13,14 @@ import org.hibernate.annotations.AnyDiscriminatorImplicitValues;
 import org.springframework.resilience.annotation.EnableResilientMethods;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="products")
 public class Product {
 
     @Id
@@ -38,7 +42,16 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name="seller_id")
+    private User user;
+
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST,CascadeType.MERGE},
+            orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<CartItem> products = new ArrayList<>();
+
 }
