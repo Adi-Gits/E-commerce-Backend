@@ -2,10 +2,13 @@ package com.ecommerce.project.CategoryService.service;
 
 import com.ecommerce.project.CategoryService.exception.APIexception;
 import com.ecommerce.project.CategoryService.exception.ResourceNotFoundException;
+import com.ecommerce.project.CategoryService.model.Cart;
 import com.ecommerce.project.CategoryService.model.Category;
 import com.ecommerce.project.CategoryService.model.Product;
+import com.ecommerce.project.CategoryService.payload.CartDTO;
 import com.ecommerce.project.CategoryService.payload.ProductDTO;
 import com.ecommerce.project.CategoryService.payload.ProductResponseDTO;
+import com.ecommerce.project.CategoryService.repositories.CartRepository;
 import com.ecommerce.project.CategoryService.repositories.CategoryRepository;
 import com.ecommerce.project.CategoryService.repositories.ProductRepository;
 import lombok.Data;
@@ -36,6 +39,11 @@ public class ProductServiceImpl implements ProductService {
     private ModelMapper modelMapper;
     @Autowired
     FileUploadService fileService;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private CartService cartService;
+
 
     @Value("${project.path}")
     String path;
@@ -187,6 +195,23 @@ public class ProductServiceImpl implements ProductService {
         productFromDB.setDiscount(product.getDiscount());
         productFromDB.setSpecialPrice(product.getPrice() - (product.getDiscount() * 0.01 * product.getPrice()));
 //        product.setCategory(updatedProduct.get);
+
+        List<Cart> carts = cartRepository.findCartsByProductId(productId);
+
+        List<CartDTO> cartDTOs = carts.stream().map(cart -> {
+            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+
+            List<ProductDTO> products = cart.getCartItems().stream()
+                    .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class)).collect(Collectors.toList());
+
+            cartDTO.setProduct(products);
+
+            return cartDTO;
+
+        }).collect(Collectors.toList());
+
+        cartDTOs.forEach(cart -> cartService.updateProductInCarts(cart.getCartId(), productId));
+
         return modelMapper.map(productRepository.save(productFromDB), ProductDTO.class);
     }
 
