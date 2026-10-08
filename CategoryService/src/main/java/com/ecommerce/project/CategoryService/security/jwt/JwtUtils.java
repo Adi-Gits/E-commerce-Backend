@@ -35,16 +35,16 @@ public class JwtUtils {
     private String jwtCookie;
 
     //we need token from Authorization header
-//    public String getTokenFromHeader(HttpServletRequest request) {
-//        //getting bearerToken from auth header
-//        String bearerToken = request.getHeader("Authorization");
-//        logger.debug("Auth header " + bearerToken);
-//        //removing bearer part
-//        if (bearerToken != null && bearerToken.startsWith("Bearer"))
-//            return bearerToken.substring(7);
-//
-//        return null;
-//    }
+    public String getTokenFromHeader(HttpServletRequest request) {
+        //getting bearerToken from auth header
+        String bearerToken = request.getHeader("Authorization");
+        logger.debug("Auth header " + bearerToken);
+        //removing bearer part
+        if (bearerToken != null && bearerToken.startsWith("Bearer"))
+            return bearerToken.substring(7);
+
+        return null;
+    }
 
     //subsequest requests
     public String getTokenFromCookie(HttpServletRequest request) {

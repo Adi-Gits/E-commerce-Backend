@@ -6,7 +6,10 @@ import com.ecommerce.project.CategoryService.model.Category;
 import com.ecommerce.project.CategoryService.payload.CategoryDTO;
 import com.ecommerce.project.CategoryService.payload.CategoryResponseDTO;
 import com.ecommerce.project.CategoryService.repositories.CategoryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
-
+//    public static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
     //    List<Category> categories = new ArrayList<>();
 //    Long nextCatId=1L;
     @Autowired
@@ -28,12 +32,16 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelmapper;
 
     @Override
-    public CategoryResponseDTO getAllCategories(Integer pgNumber,Integer pgSize,String sortBy, String sortOrder) {
+    public CategoryResponseDTO getAllCategories(Integer pgNumber, Integer pgSize, String sortBy, String sortOrder) {
+        log.debug("degudg");
+        log.info("infoo");
+        log.warn("warnnnn");
+        log.error("errrrorrr");
         //****very imp
         Sort sorting = sortOrder.equalsIgnoreCase("asc") ?
-                Sort.by(sortBy).ascending():
+                Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
-        Pageable pagedetails = PageRequest.of(pgNumber,pgSize,sorting);
+        Pageable pagedetails = PageRequest.of(pgNumber, pgSize, sorting);
         Page<Category> pageCategory = categoryRepository.findAll(pagedetails);//returns us Pages of entity
         List<Category> categories = pageCategory.getContent();//returns list of entity from page
 
@@ -84,7 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
 //        categories.add(c);
 
         //implemneting custom exception for categaroy already available
-        Category category = modelmapper.map(categoryDTO,Category.class);
+        Category category = modelmapper.map(categoryDTO, Category.class);
         Category existingCategory = categoryRepository.findByCategoryName(category.getCategoryName());
         if (existingCategory != null)
             throw new APIexception("Category " + category.getCategoryName() + " Already exists");
@@ -125,7 +133,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category oldCategory = categoryRepository.findById(catid)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", catid));
 
-        Category category = modelmapper.map(newCategory,Category.class);
+        Category category = modelmapper.map(newCategory, Category.class);
         category.setCategoryId(catid);
 //        cate.setCategoryName(cat.getCategoryName());
         return modelmapper.map(categoryRepository.save(category), CategoryDTO.class);

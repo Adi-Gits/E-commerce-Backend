@@ -46,9 +46,9 @@ public class Address {
     @Size(min=6, message="min 6 characters required for zipcode")
     private String zipcode;
 
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "addresses")
-    private List<User> user = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Address(String buildingName, String street, String city, String state, String country, String zipcode) {
         this.buildingName = buildingName;

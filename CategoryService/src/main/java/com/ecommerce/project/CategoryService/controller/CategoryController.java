@@ -5,6 +5,12 @@ import com.ecommerce.project.CategoryService.model.Category;
 import com.ecommerce.project.CategoryService.payload.CategoryDTO;
 import com.ecommerce.project.CategoryService.payload.CategoryResponseDTO;
 import com.ecommerce.project.CategoryService.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +43,13 @@ public class CategoryController {
 //        this.catSer = catSer;
 //    }
     @GetMapping("/public/categories")
+    @Tag(name="Category APIs",description = "APIs for managing categories")
+    @Operation(summary = "Get categories",description = "Get all categories that are available")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created succefully"),
+            @ApiResponse(responseCode = "400", description = "invalid input", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content =@Content)
+    })
     //setting default values here is not a good practice so we configured constants class
     public ResponseEntity<CategoryResponseDTO> getAlltheCategories(@RequestParam (name="pageNumber", defaultValue=AppConstants.pageNumber,required = false) Integer pgNumber,
                                                                    @RequestParam (name="pageSize", defaultValue=AppConstants.pageSize,required = false) Integer pgSize,
@@ -53,7 +66,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/admin/categories/{catId}")
-    public ResponseEntity<CategoryDTO> deleteCatagoryWithCatId(@PathVariable Long catId) {
+    public ResponseEntity<CategoryDTO> deleteCatagoryWithCatId(@Parameter(description = "CategoryId of category you want to delete")  @PathVariable Long catId) {
 //        try{
 //           String status = catSer.deleteCategory(catId);
 //            return new ResponseEntity<>(status,HttpStatus.OK);
