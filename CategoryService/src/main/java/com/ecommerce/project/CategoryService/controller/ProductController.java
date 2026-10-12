@@ -6,6 +6,7 @@ import com.ecommerce.project.CategoryService.payload.ProductResponseDTO;
 import com.ecommerce.project.CategoryService.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,10 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+
     @PostMapping("/admin/categories/{categoryId}/product")
     public ResponseEntity<ProductDTO> addProduct(@PathVariable Long categoryId,
-                                               @Valid @RequestBody ProductDTO product) {
+                                                 @Valid @RequestBody ProductDTO product) {
         return new ResponseEntity<>(productService.addProduct(categoryId, product), HttpStatus.CREATED);
 
     }
@@ -52,11 +54,11 @@ public class ProductController {
 
     @GetMapping("/public/product/keyword/{keyword}")
     public ResponseEntity<ProductResponseDTO> getProductByKeyword(@PathVariable String keyword,
-                                                                  @RequestParam(name="pageNumber", defaultValue = AppConstants.pageNumber, required = false) Integer pageNumber,
-                                                                  @RequestParam(name="pageSize", defaultValue = AppConstants.pageSize, required = false) Integer pageSize,
-                                                                  @RequestParam(name="sortBy", defaultValue = AppConstants.productSortBy, required = false) String sortBy,
-                                                                  @RequestParam(name="sortOrder", defaultValue = AppConstants.sortOrder,required = false) String sortOrder) {
-        return new ResponseEntity<>(productService.searchProductNameByKeyword(keyword,pageNumber,pageSize,sortBy,sortOrder), HttpStatus.FOUND);
+                                                                  @RequestParam(name = "pageNumber", defaultValue = AppConstants.pageNumber, required = false) Integer pageNumber,
+                                                                  @RequestParam(name = "pageSize", defaultValue = AppConstants.pageSize, required = false) Integer pageSize,
+                                                                  @RequestParam(name = "sortBy", defaultValue = AppConstants.productSortBy, required = false) String sortBy,
+                                                                  @RequestParam(name = "sortOrder", defaultValue = AppConstants.sortOrder, required = false) String sortOrder) {
+        return new ResponseEntity<>(productService.searchProductNameByKeyword(keyword, pageNumber, pageSize, sortBy, sortOrder), HttpStatus.FOUND);
     }
 
     @PutMapping("admin/products/{productId}")
@@ -66,13 +68,13 @@ public class ProductController {
     }
 
     @DeleteMapping("/admin/products/{productId}")
-    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId){
+    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId) {
         return new ResponseEntity<>(productService.deleteProduct(productId), HttpStatus.OK);
     }
 
     @PutMapping("/products/{productId}/image")
     public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId, @RequestParam("image") MultipartFile image) throws IOException {
-       ProductDTO productDTO = productService.updateProductImage(productId,image);
+        ProductDTO productDTO = productService.updateProductImage(productId, image);
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
 
     }

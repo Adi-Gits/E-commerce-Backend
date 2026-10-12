@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +35,13 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelmapper;
 
     @Override
+    @Cacheable(cacheNames = "categories")
     public CategoryResponseDTO getAllCategories(Integer pgNumber, Integer pgSize, String sortBy, String sortOrder) {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         log.debug("degudg");
         log.info("infoo");
         log.warn("warnnnn");
@@ -102,6 +111,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO deleteCategory(Long catId) {
         Category categories = categoryRepository.findById(catId)
 //                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category not found"));
@@ -123,6 +133,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO updateCategory(Long catid, CategoryDTO newCategory) {
 //        List<Category> categories = categoryRepository.findAll();
 //       Category cat = categories.stream()
