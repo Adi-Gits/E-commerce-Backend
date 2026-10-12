@@ -15,18 +15,12 @@ A REST API for an e-commerce application, built with Java and Spring Boot. It pr
 
 ## Tech stack
 
-- Java 25
-- Spring Boot 4.1.1
+- Java 
+- Spring Boot
 - Spring MVC, Spring Data JPA, and Spring Security
 - MySQL or H2
 - Redis
 - Maven Wrapper
-
-## Prerequisites
-
-- JDK 25
-- MySQL, if using the default MySQL setup
-- Redis on `localhost:6379` to use the configured Redis cache
 
 ## Getting started
 
