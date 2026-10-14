@@ -122,5 +122,4 @@ The application configures Redis as its Spring Cache backend, using `localhost:6
 
 ## Notes
 
-- Configure database credentials and JWT secrets locally; do not commit real secrets.
-- Review the security rules and any development/demo account initialization before deploying this project to a production environment.
+- Configure database credentials and JWT secrets locally.
